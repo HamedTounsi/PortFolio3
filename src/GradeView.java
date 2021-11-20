@@ -11,8 +11,8 @@ import javafx.scene.layout.GridPane;
 
 public class GradeView {
     GradeController controller;
-    private GridPane StudentView;
-    private GridPane CourseView;
+    GridPane StudentView;
+    GridPane CourseView;
     private TabPane TabView;
 
 
@@ -23,8 +23,8 @@ public class GradeView {
     Label studentLbl = new Label("Student");
     Label courseLbl = new Label("Course");
 
-    ComboBox<String> studentComB = new ComboBox<String>();
-    ComboBox<String> courseComB = new ComboBox<String>();
+    ComboBox<String> studentComB = new ComboBox<>();
+    ComboBox<String> courseComB = new ComboBox<>();
     TextArea studentGradeArea = new TextArea();
     TextArea courseGradeArea = new TextArea();
 
@@ -64,8 +64,8 @@ public class GradeView {
         StudentView.add(studentComB, 14, 1);
         ObservableList<String> studentList = controller.getStudents();
         studentComB.setItems(studentList);
-        StudentView.add(findStudentBtn, 15, 12);
-        StudentView.add(studentGradeArea, 1, 7, 15, 7);
+        StudentView.add(findStudentBtn, 15, 1);
+        StudentView.add(studentGradeArea, 2, 7, 15, 7);
         StudentView.add(exitBtnStudent, 20, 15);
 
 
@@ -73,8 +73,8 @@ public class GradeView {
         CourseView.add(courseComB, 14, 1);
         ObservableList<String> courseList = controller.getCourses();
         courseComB.setItems(courseList);
-        CourseView.add(findCourseBtn, 15, 12);
-        CourseView.add(courseGradeArea, 1, 7, 15, 7);
+        CourseView.add(findCourseBtn, 15, 1);
+        CourseView.add(courseGradeArea, 2, 7, 15, 7);
         CourseView.add(exitBtnCourse, 20, 15);
 
     }
