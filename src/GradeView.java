@@ -37,8 +37,8 @@ public class GradeView {
         StudentView = new GridPane();
         CourseView = new GridPane();
         TabView = new TabPane();
-        Tab studentTab = new Tab("Students", new Label("Search by student"));
-        Tab courseTab = new Tab("Courses", new Label("Search by course"));
+        Tab studentTab = new Tab("Students");
+        Tab courseTab = new Tab("Courses");
 
         //Set the closing policy to false so the user can't close the tabs
         studentTab.setClosable(false);

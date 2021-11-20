@@ -11,6 +11,7 @@ public class GradesModel {
 
     GradesModel (String url){this.url = url;}
 
+    //Connect to the database
     public void connectToUniDB() throws SQLException {
         connection = DriverManager.getConnection(url);
     }
@@ -37,8 +38,13 @@ public class GradesModel {
         return courseGrade;
     }
 
-    public void preparedStmsCourseGrade(){
-        String sql = "SELECT CourseID, Grade FROM Grade WHERE CourseID = ?";
+    public void preparedStmsCourseGradeAvr(String courseID){
+        String sql = "SELECT AVG(Grade) FROM Grade WHERE CourseID = ?";
+        try{
+            pstmt = connection.prepareStatement(sql);
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public ArrayList<String> SQLQueryStudentNames() throws SQLException{

@@ -28,6 +28,9 @@ public class GradeController {
         this.view = view;
         view.exitBtnStudent.setOnAction(e-> Platform.exit());
         view.exitBtnCourse.setOnAction(e-> Platform.exit());
+
+        EventHandler<ActionEvent> printCourseAvr = e -> printCourseGradeAvr(view.courseComB.getValue(), view.courseGradeArea);
+        view.findCourseBtn.setOnAction(printCourseAvr);
     }
 
     public ObservableList<String> getStudents(){
@@ -50,6 +53,12 @@ public class GradeController {
         }
         ObservableList<String> courseNames = FXCollections.observableList(names);
         return courseNames;
+    }
+
+    public void printCourseGradeAvr(String courseID, TextArea txtArea){
+        txtArea.clear();
+        txtArea.appendText("The average grade for the course is: ");
+        model.preparedStmsCourseGradeAvr(courseID);
     }
 
 
