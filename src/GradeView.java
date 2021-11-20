@@ -1,31 +1,86 @@
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.GridPane;
 
-import java.awt.*;
 
 public class GradeView {
-    private GridPane StartView;
-    Button exitBtn = new Button("Exit");
+    GradeController controller;
+    private GridPane StudentView;
+    private GridPane CourseView;
+    private TabPane TabView;
 
-    public GradeView(){
+
+    Button exitBtnStudent = new Button("Exit");
+    Button exitBtnCourse = new Button("Exit");
+    Button findStudentBtn = new Button("Find Grade");
+    Button findCourseBtn = new Button("Find Grade");
+    Label studentLbl = new Label("Student");
+    Label courseLbl = new Label("Course");
+
+    ComboBox<String> studentComB = new ComboBox<String>();
+    ComboBox<String> courseComB = new ComboBox<String>();
+    TextArea studentGradeArea = new TextArea();
+    TextArea courseGradeArea = new TextArea();
+
+    public GradeView(GradeController controller){
+        this.controller = controller;
         createAndConfigure();
     }
 
     private void createAndConfigure(){
-        StartView = new GridPane();
-        StartView.setMinSize(300,200);
-        StartView.setPadding(new Insets(10,10,10,10));
-        StartView.setVgap(5);
-        StartView.setHgap(1);
+        StudentView = new GridPane();
+        CourseView = new GridPane();
+        TabView = new TabPane();
+        Tab studentTab = new Tab("Students", new Label("Search by student"));
+        Tab courseTab = new Tab("Courses", new Label("Search by course"));
+
+        //Set the closing policy to false so the user can't close the tabs
+        studentTab.setClosable(false);
+        courseTab.setClosable(false);
+
+        TabView.getTabs().add(studentTab);
+        TabView.getTabs().add(courseTab);
+
+        StudentView.setMinSize(300,200);
+        StudentView.setPadding(new Insets(10,10,10,10));
+        StudentView.setVgap(5);
+        StudentView.setHgap(1);
+
+        CourseView.setMinSize(300,200);
+        CourseView.setPadding(new Insets(10,10,10,10));
+        CourseView.setVgap(5);
+        CourseView.setHgap(1);
+
+        studentTab.setContent(StudentView);
+        courseTab.setContent(CourseView);
+
+        StudentView.add(studentLbl, 1, 1);
+        StudentView.add(studentComB, 14, 1);
+        ObservableList<String> studentList = controller.getStudents();
+        studentComB.setItems(studentList);
+        StudentView.add(findStudentBtn, 15, 12);
+        StudentView.add(studentGradeArea, 1, 7, 15, 7);
+        StudentView.add(exitBtnStudent, 20, 15);
 
 
-        StartView.add(exitBtn, 20, 15);
+        CourseView.add(courseLbl, 1, 1);
+        CourseView.add(courseComB, 14, 1);
+        ObservableList<String> courseList = controller.getCourses();
+        courseComB.setItems(courseList);
+        CourseView.add(findCourseBtn, 15, 12);
+        CourseView.add(courseGradeArea, 1, 7, 15, 7);
+        CourseView.add(exitBtnCourse, 20, 15);
+
     }
 
     public Parent asParent(){
-        return StartView;
+        return TabView;
     }
 
 

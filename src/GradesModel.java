@@ -39,7 +39,29 @@ public class GradesModel {
 
     public void preparedStmsCourseGrade(){
         String sql = "SELECT CourseID, Grade FROM Grade WHERE CourseID = ?";
-
-
     }
+
+    public ArrayList<String> SQLQueryStudentNames() throws SQLException{
+        ArrayList<String> students = new ArrayList<>();
+        String sql = "SELECT Name FROM Student;";
+        resultSet = stmt.executeQuery(sql);
+        while(resultSet != null && resultSet.next()){
+            String name = resultSet.getString(1);
+            students.add(name);
+        }
+        return students;
+    }
+
+    public ArrayList<String> SQLQueryCourseNames() throws SQLException{
+        ArrayList<String> courses = new ArrayList<>();
+        String sql = "SELECT Name FROM Course;";
+        resultSet = stmt.executeQuery(sql);
+        while(resultSet != null && resultSet.next()){
+            String name = resultSet.getString(1);
+            courses.add(name);
+        }
+        return courses;
+    }
+
+
 }

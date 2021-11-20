@@ -24,6 +24,34 @@ public class GradeController {
         }
     }
 
+    public void setView(GradeView view){
+        this.view = view;
+        view.exitBtnStudent.setOnAction(e-> Platform.exit());
+        view.exitBtnCourse.setOnAction(e-> Platform.exit());
+    }
+
+    public ObservableList<String> getStudents(){
+        ArrayList<String> names = null;
+        try {
+            names = model.SQLQueryStudentNames();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        ObservableList<String> studentNames = FXCollections.observableList(names);
+        return studentNames;
+    }
+
+    public ObservableList<String> getCourses(){
+        ArrayList<String> names = null;
+        try {
+            names = model.SQLQueryCourseNames();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        ObservableList<String> courseNames = FXCollections.observableList(names);
+        return courseNames;
+    }
+
 
     ArrayList<Integer> grades = new ArrayList<>();
 
