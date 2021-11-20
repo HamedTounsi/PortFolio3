@@ -1,4 +1,3 @@
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -8,6 +7,8 @@ public class GradesModel {
     Statement stmt = null;
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
+    String courseID;
+    Integer studentID;
 
     GradesModel (String url){this.url = url;}
 
@@ -26,27 +27,6 @@ public class GradesModel {
         this.stmt = connection.createStatement();
     }
 
-    public ArrayList<Integer> SQLQueryCourseGrade(String courseID) throws SQLException {
-        ArrayList<Integer> courseGrade = new ArrayList<>();
-        String sql = "SELECT CourseID, Grade FROM Grade WHERE CourseID LIKE '"+courseID+"';";
-        resultSet = stmt.executeQuery(sql);
-        while (resultSet != null && resultSet.next()){
-            Integer grade = resultSet.getInt(2);
-            System.out.println(grade);
-            courseGrade.add(grade);
-        }
-        return courseGrade;
-    }
-
-    public void preparedStmsCourseGradeAvr(String courseID){
-        String sql = "SELECT AVG(Grade) FROM Grade WHERE CourseID = ?";
-        try{
-            pstmt = connection.prepareStatement(sql);
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
     public ArrayList<String> SQLQueryStudentNames() throws SQLException{
         ArrayList<String> students = new ArrayList<>();
         String sql = "SELECT Name FROM Student;";
@@ -58,7 +38,7 @@ public class GradesModel {
         return students;
     }
 
-    public ArrayList<String> SQLQueryCourseNames() throws SQLException{
+    public ArrayList<String> SQLQueryCourseName() throws SQLException{
         ArrayList<String> courses = new ArrayList<>();
         String sql = "SELECT Name FROM Course;";
         resultSet = stmt.executeQuery(sql);
@@ -67,6 +47,75 @@ public class GradesModel {
             courses.add(name);
         }
         return courses;
+    }
+
+    /*This method returns the courseID of a given course
+    * We then use this method in the preparedStmtCourseGradeAvr method
+    * to get the courseID for the course we want to know the grade average of */
+    public String findCourseID(String CourseName){
+        String sql = "SELECT ID FROM Course WHERE Name = ?;";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, CourseName);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null && resultSet.next()){
+                courseID = resultSet.getString(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return courseID;
+    }
+
+    public Double preparedStmtCourseGradeAvr(String courseName) {
+        String courseID = findCourseID(courseName);
+        String sql = "SELECT AVG(Grade) FROM Grade WHERE CourseID = ?;";
+        System.out.println(courseID);
+        Double avr = null;
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, courseID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null & resultSet.next()){
+                avr = resultSet.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return avr;
+    }
+
+    public Integer findStudentID(String studentName){
+        String sql = "SELECT ID FROM Student WHERE Name = ?";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, studentName);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null && resultSet.next()){
+                studentID = resultSet.getInt(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return studentID;
+    }
+
+    public Double preparedStmtStudentGradeAvr(String studentName) {
+        Integer studentID = findStudentID(studentName);
+        String sql = "SELECT AVG(Grade) FROM Grade WHERE StudentID = ?;";
+        System.out.println(studentID);
+        Double avr = null;
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, studentID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null & resultSet.next()){
+                avr = resultSet.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return avr;
     }
 
 

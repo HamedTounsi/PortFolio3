@@ -4,7 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
-import org.w3c.dom.ls.LSOutput;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +30,9 @@ public class GradeController {
 
         EventHandler<ActionEvent> printCourseAvr = e -> printCourseGradeAvr(view.courseComB.getValue(), view.courseGradeArea);
         view.findCourseBtn.setOnAction(printCourseAvr);
+
+        EventHandler<ActionEvent> printStudentAvr = e -> printStudentGradeAvr(view.studentComB.getValue(), view.studentGradeArea);
+        view.findStudentBtn.setOnAction(printStudentAvr);
     }
 
     public ObservableList<String> getStudents(){
@@ -47,7 +49,7 @@ public class GradeController {
     public ObservableList<String> getCourses(){
         ArrayList<String> names = null;
         try {
-            names = model.SQLQueryCourseNames();
+            names = model.SQLQueryCourseName();
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -57,12 +59,15 @@ public class GradeController {
 
     public void printCourseGradeAvr(String courseID, TextArea txtArea){
         txtArea.clear();
-        txtArea.appendText("The average grade for the course is: ");
-        model.preparedStmsCourseGradeAvr(courseID);
+        txtArea.appendText("The average grade for the course is: \n");
+        Double avr = model.preparedStmtCourseGradeAvr(courseID);
+        txtArea.appendText(String.valueOf(avr));
     }
 
-
-    ArrayList<Integer> grades = new ArrayList<>();
-
-
+    public void printStudentGradeAvr(String studentID, TextArea txtArea){
+        txtArea.clear();
+        txtArea.appendText("This students average grade is: \n");
+        Double avr = model.preparedStmtStudentGradeAvr(studentID);
+        txtArea.appendText(String.valueOf(avr));
+    }
 }
