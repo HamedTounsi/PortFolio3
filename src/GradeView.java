@@ -67,6 +67,7 @@ public class GradeView {
         studentComB.getSelectionModel().selectFirst();
         StudentView.add(findStudentBtn, 15, 1);
         StudentView.add(studentGradeArea, 2, 7, 15, 7);
+        studentGradeArea.setEditable(false);
         StudentView.add(exitBtnStudent, 20, 15);
 
 
@@ -77,6 +78,7 @@ public class GradeView {
         courseComB.getSelectionModel().selectFirst();
         CourseView.add(findCourseBtn, 15, 1);
         CourseView.add(courseGradeArea, 2, 7, 15, 7);
+        courseGradeArea.setEditable(false);
         CourseView.add(exitBtnCourse, 20, 15);
 
     }
