@@ -64,6 +64,7 @@ public class GradeView {
         StudentView.add(studentComB, 14, 1);
         ObservableList<String> studentList = controller.getStudents();
         studentComB.setItems(studentList);
+        studentComB.getSelectionModel().selectFirst();
         StudentView.add(findStudentBtn, 15, 1);
         StudentView.add(studentGradeArea, 2, 7, 15, 7);
         StudentView.add(exitBtnStudent, 20, 15);
@@ -73,6 +74,7 @@ public class GradeView {
         CourseView.add(courseComB, 14, 1);
         ObservableList<String> courseList = controller.getCourses();
         courseComB.setItems(courseList);
+        courseComB.getSelectionModel().selectFirst();
         CourseView.add(findCourseBtn, 15, 1);
         CourseView.add(courseGradeArea, 2, 7, 15, 7);
         CourseView.add(exitBtnCourse, 20, 15);
