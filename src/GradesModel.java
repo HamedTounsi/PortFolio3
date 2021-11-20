@@ -58,7 +58,7 @@ public class GradesModel {
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, CourseName);
             resultSet = pstmt.executeQuery();
-            if (resultSet != null && resultSet.next()){
+            if (resultSet != null){
                 courseID = resultSet.getString(1);
             }
         } catch (SQLException e){
@@ -76,7 +76,7 @@ public class GradesModel {
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, courseID);
             resultSet = pstmt.executeQuery();
-            if (resultSet != null & resultSet.next()){
+            if (resultSet != null){
                 avr = resultSet.getDouble(1);
             }
         } catch (SQLException e) {
@@ -91,7 +91,7 @@ public class GradesModel {
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, studentName);
             resultSet = pstmt.executeQuery();
-            if (resultSet != null && resultSet.next()){
+            if (resultSet != null){
                 studentID = resultSet.getInt(1);
             }
         } catch (SQLException e){
@@ -109,7 +109,7 @@ public class GradesModel {
             pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, studentID);
             resultSet = pstmt.executeQuery();
-            if (resultSet != null & resultSet.next()){
+            if (resultSet != null){
                 avr = resultSet.getDouble(1);
             }
         } catch (SQLException e) {
