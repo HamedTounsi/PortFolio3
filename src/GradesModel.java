@@ -1,5 +1,7 @@
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
+import javafx.scene.control.TextArea;
 
 public class GradesModel {
     Connection connection = null;
@@ -8,6 +10,8 @@ public class GradesModel {
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
     String courseID;
+    String teacherName;
+    Integer teacherID;
     Integer studentID;
 
     GradesModel (String url){this.url = url;}
@@ -67,10 +71,41 @@ public class GradesModel {
         return courseID;
     }
 
+    public Integer findTeacherID(String CourseID){
+        String sql = "SELECT TeacherID FROM Course WHERE ID = ?;";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, CourseID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null && resultSet.next()){
+                teacherID = resultSet.getInt(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return teacherID;
+    }
+
+    public String findTeacherName(String courseName){
+        String courseID = findCourseID(courseName);
+        Integer tID = findTeacherID(courseID);
+        String sql = "SELECT Name FROM Teacher WHERE ID = ?";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, tID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null){
+                teacherName = resultSet.getString(1);
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return teacherName;
+    }
+
     public Double preparedStmtCourseGradeAvr(String courseName) {
         String courseID = findCourseID(courseName);
         String sql = "SELECT AVG(Grade) FROM Grade WHERE CourseID = ?;";
-        System.out.println(courseID);
         Double avr = null;
         try {
             pstmt = connection.prepareStatement(sql);
@@ -103,7 +138,6 @@ public class GradesModel {
     public Double preparedStmtStudentGradeAvr(String studentName) {
         Integer studentID = findStudentID(studentName);
         String sql = "SELECT AVG(Grade) FROM Grade WHERE StudentID = ?;";
-        System.out.println(studentID);
         Double avr = null;
         try {
             pstmt = connection.prepareStatement(sql);

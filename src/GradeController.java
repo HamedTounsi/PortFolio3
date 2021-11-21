@@ -29,6 +29,7 @@ public class GradeController {
         view.exitBtnCourse.setOnAction(e-> Platform.exit());
 
         EventHandler<ActionEvent> printCourseAvr = e -> printCourseGradeAvr(view.courseComB.getValue(), view.courseGradeArea);
+        //EventHandler<ActionEvent> printTeacherName = e -> model.findTeacherName(view.courseComB.getValue(), view.courseGradeArea);
         view.findCourseBtn.setOnAction(printCourseAvr);
 
         EventHandler<ActionEvent> printStudentAvr = e -> printStudentGradeAvr(view.studentComB.getValue(), view.studentGradeArea);
@@ -57,11 +58,13 @@ public class GradeController {
         return courseNames;
     }
 
-    public void printCourseGradeAvr(String courseID, TextArea txtArea){
+    public void printCourseGradeAvr(String courseName, TextArea txtArea){
         txtArea.clear();
         txtArea.appendText("The average grade for the course is: \n");
-        Double avr = model.preparedStmtCourseGradeAvr(courseID);
+        Double avr = model.preparedStmtCourseGradeAvr(courseName);
+        String teacherName = model.findTeacherName(courseName);
         txtArea.appendText(String.valueOf(avr));
+        txtArea.appendText("\nTeacher of this course is: "+teacherName);
     }
 
     public void printStudentGradeAvr(String studentID, TextArea txtArea){
