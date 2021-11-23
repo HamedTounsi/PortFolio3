@@ -34,6 +34,7 @@ public class GradesModel {
         return students;
     }
 
+    //Method to Query all the course names from our database
     public ArrayList<String> SQLQueryCourseName() throws SQLException{
         ArrayList<String> courses = new ArrayList<>();
         String sql = "SELECT Name FROM Course;";
@@ -63,6 +64,7 @@ public class GradesModel {
         return courseID;
     }
 
+    //Returns the TeacherID of the teacher of a given Course
     public Integer findTeacherID(String CourseID){
         String sql = "SELECT TeacherID FROM Course WHERE ID = ?;";
         try {
@@ -78,6 +80,7 @@ public class GradesModel {
         return teacherID;
     }
 
+    //Finds the Teacher Name of a given TeacherID
     public String findTeacherName(String courseName){
         String courseID = findCourseID(courseName);
         Integer tID = findTeacherID(courseID);
@@ -95,7 +98,8 @@ public class GradesModel {
         return teacherName;
     }
 
-    public Double preparedStmtCourseGradeAvr(String courseName) {
+    //Finds the average grade of a given course
+    public Double findCourseGradeAvr(String courseName) {
         String courseID = findCourseID(courseName);
         String sql = "SELECT AVG(Grade) FROM Grade WHERE CourseID = ?;";
         Double avr = null;
@@ -112,6 +116,7 @@ public class GradesModel {
         return avr;
     }
 
+    //Finds the studentID of a given student
     public Integer findStudentID(String studentName){
         String sql = "SELECT ID FROM Student WHERE Name = ?";
         try {
@@ -127,6 +132,7 @@ public class GradesModel {
         return studentID;
     }
 
+    //Finds the grade of the student and stores them in the object "gradesAndCourse"
     public ArrayList<gradesAndCourse> findStudentGrade(String studentName) {
         Integer studentID = findStudentID(studentName);
         ArrayList<gradesAndCourse> Grades = new ArrayList<>();
@@ -147,7 +153,8 @@ public class GradesModel {
             return Grades;
     }
 
-    public Double preparedStmtStudentGradeAvr(String studentName) {
+    //Takes the average of the students grades from the database and returns it as a Double.
+    public Double findStudentGradeAvr(String studentName) {
         Integer studentID = findStudentID(studentName);
         String sql = "SELECT AVG(Grade) FROM Grade WHERE StudentID = ?;";
         Double avr = null;
@@ -164,6 +171,7 @@ public class GradesModel {
         return avr;
     }
 
+    //Updates the grade info for a given student, if the grade is null
     public void updateGrade(String studentName, Integer newGrade){
         Integer studentID = findStudentID(studentName);
         String sql = "UPDATE Grade SET Grade = ? WHERE StudentID = ? AND Grade IS NULL;";
@@ -184,6 +192,7 @@ class gradesAndCourse{
     String CourseID;
     public static Boolean isGradeEmpty = false;
 
+    //constructor
     public gradesAndCourse(String courseID, Integer grade) {
         studentGrade = grade;
         CourseID = courseID;

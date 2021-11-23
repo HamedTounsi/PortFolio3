@@ -42,11 +42,13 @@ public class GradeView {
         editGradeBtn.setVisible(false);
     }
 
+    //GradeView constructor
     public GradeView(GradeController controller){
         this.controller = controller;
         createAndConfigure();
     }
 
+    //Here we create and configure all the nodes(buttons, labels, comboBoxes, TextArea)
     private void createAndConfigure(){
         StudentView = new GridPane();
         CourseView = new GridPane();
@@ -68,6 +70,7 @@ public class GradeView {
         TabView.getTabs().add(studentTab);
         TabView.getTabs().add(courseTab);
 
+        //Setting the size, padding and gap of the two GridPanes
         StudentView.setMinSize(300,200);
         StudentView.setPadding(new Insets(10,10,10,10));
         StudentView.setVgap(5);
@@ -78,31 +81,31 @@ public class GradeView {
         CourseView.setVgap(5);
         CourseView.setHgap(1);
 
+        //assign each GridPane to it's Tabview
         studentTab.setContent(StudentView);
         courseTab.setContent(CourseView);
 
+        //Adding the nodes to the StudentView GridPane
         StudentView.add(studentLbl, 1, 1);
         StudentView.add(studentComB, 14, 1);
-        ObservableList<String> studentList = controller.getStudents();
-        studentComB.setItems(studentList);
+        studentComB.setItems(controller.getStudents());
         studentComB.getSelectionModel().selectFirst();
         StudentView.add(findStudentBtn, 15, 1);
         StudentView.add(studentGradeArea, 2, 7, 15, 7);
         studentGradeArea.setEditable(false); //Ready-only TextArea
         StudentView.add(exitBtnStudent, 20, 15);
 
-        ObservableList<Integer> pG = FXCollections.observableList(possibleGrades);
-        editGradeComB.setItems(pG);
+        editGradeComB.setItems(FXCollections.observableList(possibleGrades));
         StudentView.add(editGradeComB, 14, 15);
         editGradeComB.getSelectionModel().selectFirst();
         StudentView.add(editGradeBtn, 14, 16);
         editGradeComB.setVisible(false);
         editGradeBtn.setVisible(false);
 
+        //Adding the nodes to the CourseView GridPane
         CourseView.add(courseLbl, 1, 1);
         CourseView.add(courseComB, 14, 1);
-        ObservableList<String> courseList = controller.getCourses();
-        courseComB.setItems(courseList);
+        courseComB.setItems(controller.getCourses());
         courseComB.getSelectionModel().selectFirst();
         CourseView.add(findCourseBtn, 15, 1);
         CourseView.add(courseGradeArea, 2, 7, 15, 7);
