@@ -1,7 +1,5 @@
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
-import javafx.scene.control.TextArea;
 
 public class GradesModel {
     Connection connection;
@@ -19,12 +17,6 @@ public class GradesModel {
     //Connect to the database
     public void connectToUniDB() throws SQLException {
         connection = DriverManager.getConnection(url);
-    }
-
-    public void closeConnectionToUniDB() throws SQLException {
-        if (connection != null){
-            connection.close();
-        }
     }
 
     public void createStatement() throws SQLException {
@@ -136,7 +128,7 @@ public class GradesModel {
     }
 
     public ArrayList<gradesAndCourse> findStudentGrade(String studentName) {
-        Integer studentId = findStudentID(studentName);
+        Integer studentID = findStudentID(studentName);
         ArrayList<gradesAndCourse> Grades = new ArrayList<>();
         String sql = "SELECT CourseID,IFNULL(Grade, 400) FROM Grade WHERE StudentID = ?";
         try {
@@ -153,23 +145,6 @@ public class GradesModel {
                 System.out.println(e.getMessage());
             }
             return Grades;
-    }
-
-    public String getNullGrade(String studentName){
-        Integer studentID = findStudentID(studentName);
-        String result = null;
-        String sql = "SELECT CourseID,Grade FROM Grade WHERE StudentID = ? AND Grade IS NULL";
-        try {
-            pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, studentID);
-            resultSet = pstmt.executeQuery();
-            if (resultSet != null){
-                result = "No grades have been given";
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return result;
     }
 
     public Double preparedStmtStudentGradeAvr(String studentName) {
@@ -196,7 +171,6 @@ public class GradesModel {
             pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, newGrade);
             pstmt.setInt(2, studentID);
-            System.out.println(pstmt);
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e){

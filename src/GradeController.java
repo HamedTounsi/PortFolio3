@@ -4,11 +4,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import static javafx.scene.text.Font.font;
 
 public class GradeController {
     GradesModel model;
@@ -36,9 +33,9 @@ public class GradeController {
         EventHandler<ActionEvent> printStudentAvr = e -> printStudentGradeAvr(view.studentComB.getValue(), view.studentGradeArea);
         view.findStudentBtn.setOnAction(printStudentAvr);
 
-        EventHandler<ActionEvent> updateGrade = e -> checkIfGradeNull(view.studentComB.getValue(), view.editGradeComB.getValue(), view.studentGradeArea);
+        EventHandler<ActionEvent> updateGrade =
+                e -> checkIfGradeNull(view.studentComB.getValue(), view.editGradeComB.getValue(), view.studentGradeArea);
         view.editGradeBtn.setOnAction(updateGrade);
-
     }
 
     public ObservableList<String> getStudents(){
@@ -48,8 +45,8 @@ public class GradeController {
         } catch (SQLException e){
             e.printStackTrace();
         }
-        ObservableList<String> studentNames = FXCollections.observableList(names);
-        return studentNames;
+        assert names != null;
+        return FXCollections.observableList(names);
     }
 
     public ObservableList<String> getCourses(){
@@ -59,8 +56,8 @@ public class GradeController {
         } catch (SQLException e){
             e.printStackTrace();
         }
-        ObservableList<String> courseNames = FXCollections.observableList(names);
-        return courseNames;
+        assert names != null;
+        return FXCollections.observableList(names);
     }
 
     public void printCourseGradeAvr(String courseName, TextArea txtArea){
@@ -68,7 +65,8 @@ public class GradeController {
         txtArea.appendText("The average grade for the course is: \n");
         String roundedAvr = String.format("%.2g%n", model.preparedStmtCourseGradeAvr(courseName));
         String teacherName = model.findTeacherName(courseName);
-        txtArea.appendText(String.valueOf(roundedAvr));
+        txtArea.appendText(String.valueOf(roundedAvr))
+        ;
         txtArea.appendText("\nTeacher of this course is: "+teacherName);
     }
 
@@ -79,13 +77,13 @@ public class GradeController {
         ArrayList<gradesAndCourse> Grade = model.findStudentGrade(studentName);
         txtArea.appendText(String.valueOf(avr));
         txtArea.appendText("\nStudents grades: \n");
-        for (int i = 0; i < Grade.size(); i++) {
-            if (Grade.get(i).studentGrade == 400) {
-                txtArea.appendText(Grade.get(i).CourseID + ": No grade have been given yet.\n");
+        for (gradesAndCourse result : Grade) {
+            if (result.studentGrade == 400) {
+                txtArea.appendText(result.CourseID + ": No grade have been given yet.\n");
                 view.editBtnVisible();
             } else {
-                txtArea.appendText(Grade.get(i).CourseID + ": " + Grade.get(i).studentGrade + "\n");
-                view.editBtnNotVisiable();
+                txtArea.appendText(result.CourseID + ": " + result.studentGrade + "\n");
+                view.editBtnNotVisible();
             }
         }
     }

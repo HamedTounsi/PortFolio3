@@ -37,7 +37,7 @@ public class GradeView {
         editGradeBtn.setVisible(true);
     }
 
-    public void editBtnNotVisiable(){
+    public void editBtnNotVisible(){
         editGradeComB.setVisible(false);
         editGradeBtn.setVisible(false);
     }
@@ -110,10 +110,7 @@ public class GradeView {
         CourseView.add(exitBtnCourse, 20, 15);
 
     }
-
     public Parent asParent(){
         return TabView;
     }
-
-
 }

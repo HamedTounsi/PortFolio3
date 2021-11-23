@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) {
         String url = "jdbc:sqlite:C:/Users/Hamed Tounsi/IdeaProjects/PortFolio 3/UniDB.sqlite";
         GradesModel model = new GradesModel(url);
         GradeController controller = new GradeController(model);
