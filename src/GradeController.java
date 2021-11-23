@@ -8,6 +8,8 @@ import javafx.scene.control.TextArea;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static javafx.scene.text.Font.font;
+
 public class GradeController {
     GradesModel model;
     GradeView view;
@@ -29,11 +31,14 @@ public class GradeController {
         view.exitBtnCourse.setOnAction(e-> Platform.exit());
 
         EventHandler<ActionEvent> printCourseAvr = e -> printCourseGradeAvr(view.courseComB.getValue(), view.courseGradeArea);
-        //EventHandler<ActionEvent> printTeacherName = e -> model.findTeacherName(view.courseComB.getValue(), view.courseGradeArea);
         view.findCourseBtn.setOnAction(printCourseAvr);
 
         EventHandler<ActionEvent> printStudentAvr = e -> printStudentGradeAvr(view.studentComB.getValue(), view.studentGradeArea);
         view.findStudentBtn.setOnAction(printStudentAvr);
+
+        EventHandler<ActionEvent> updateGrade = e -> checkIfGradeNull(view.studentComB.getValue(), view.editGradeComB.getValue(), view.studentGradeArea);
+        view.editGradeBtn.setOnAction(updateGrade);
+
     }
 
     public ObservableList<String> getStudents(){
@@ -61,16 +66,32 @@ public class GradeController {
     public void printCourseGradeAvr(String courseName, TextArea txtArea){
         txtArea.clear();
         txtArea.appendText("The average grade for the course is: \n");
-        Double avr = model.preparedStmtCourseGradeAvr(courseName);
+        String roundedAvr = String.format("%.2g%n", model.preparedStmtCourseGradeAvr(courseName));
         String teacherName = model.findTeacherName(courseName);
-        txtArea.appendText(String.valueOf(avr));
+        txtArea.appendText(String.valueOf(roundedAvr));
         txtArea.appendText("\nTeacher of this course is: "+teacherName);
     }
 
-    public void printStudentGradeAvr(String studentID, TextArea txtArea){
+    public void printStudentGradeAvr(String studentName, TextArea txtArea){
         txtArea.clear();
         txtArea.appendText("This students average grade is: \n");
-        Double avr = model.preparedStmtStudentGradeAvr(studentID);
+        Double avr = model.preparedStmtStudentGradeAvr(studentName);
+        ArrayList<gradesAndCourse> Grade = model.findStudentGrade(studentName);
         txtArea.appendText(String.valueOf(avr));
+        txtArea.appendText("\nStudents grades: \n");
+        for (int i = 0; i < Grade.size(); i++) {
+            if (Grade.get(i).studentGrade == 400) {
+                txtArea.appendText(Grade.get(i).CourseID + ": No grade have been given yet.\n");
+                view.editBtnVisible();
+            } else {
+                txtArea.appendText(Grade.get(i).CourseID + ": " + Grade.get(i).studentGrade + "\n");
+                view.editBtnNotVisiable();
+            }
+        }
+    }
+
+    public void checkIfGradeNull(String studentName, Integer newGrade, TextArea txtArea){
+        model.updateGrade(studentName, newGrade);
+        printStudentGradeAvr(studentName, txtArea);
     }
 }

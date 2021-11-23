@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import javafx.scene.control.TextArea;
 
 public class GradesModel {
-    Connection connection = null;
-    String url = null;
-    Statement stmt = null;
-    PreparedStatement pstmt = null;
-    ResultSet resultSet = null;
+    Connection connection;
+    String url;
+    Statement stmt;
+    PreparedStatement pstmt;
+    ResultSet resultSet;
     String courseID;
     String teacherName;
     Integer teacherID;
@@ -135,6 +135,43 @@ public class GradesModel {
         return studentID;
     }
 
+    public ArrayList<gradesAndCourse> findStudentGrade(String studentName) {
+        Integer studentId = findStudentID(studentName);
+        ArrayList<gradesAndCourse> Grades = new ArrayList<>();
+        String sql = "SELECT CourseID,IFNULL(Grade, 400) FROM Grade WHERE StudentID = ?";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, studentID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet == null) {
+                System.out.println("No records!");
+            }
+            while (resultSet != null && resultSet.next()){
+                Grades.add(new gradesAndCourse(resultSet.getString(1),resultSet.getInt(2)));
+            }
+            } catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
+            return Grades;
+    }
+
+    public String getNullGrade(String studentName){
+        Integer studentID = findStudentID(studentName);
+        String result = null;
+        String sql = "SELECT CourseID,Grade FROM Grade WHERE StudentID = ? AND Grade IS NULL";
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, studentID);
+            resultSet = pstmt.executeQuery();
+            if (resultSet != null){
+                result = "No grades have been given";
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
     public Double preparedStmtStudentGradeAvr(String studentName) {
         Integer studentID = findStudentID(studentName);
         String sql = "SELECT AVG(Grade) FROM Grade WHERE StudentID = ?;";
@@ -152,5 +189,45 @@ public class GradesModel {
         return avr;
     }
 
+    public void updateGrade(String studentName, Integer newGrade){
+        Integer studentID = findStudentID(studentName);
+        String sql = "UPDATE Grade SET Grade = ? WHERE StudentID = ? AND Grade IS NULL;";
+        try{
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, newGrade);
+            pstmt.setInt(2, studentID);
+            System.out.println(pstmt);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+}
 
+class gradesAndCourse{
+    Integer studentGrade;
+    String CourseID;
+    public static Boolean isGradeEmpty = false;
+
+    public gradesAndCourse(String courseID, Integer grade) {
+        studentGrade = grade;
+        CourseID = courseID;
+    }
+
+    @Override
+    public String toString() {
+        return "gradesAndCourse{" +
+                "Grade=" + studentGrade +
+                ", CourseID='" + CourseID + '\'' +
+                '}';
+    }
+
+    public static Boolean getIsGradeEmpty() {
+        return isGradeEmpty;
+    }
+
+    public static void setIsGradeEmpty(Boolean isGradeEmpty) {
+        gradesAndCourse.isGradeEmpty = isGradeEmpty;
+    }
 }

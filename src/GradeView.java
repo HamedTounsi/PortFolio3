@@ -1,3 +1,4 @@
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -7,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
+import java.util.ArrayList;
 
 
 public class GradeView {
@@ -14,19 +16,31 @@ public class GradeView {
     GridPane StudentView;
     GridPane CourseView;
     private TabPane TabView;
-
+    ArrayList<Integer> possibleGrades = new ArrayList<>();
 
     Button exitBtnStudent = new Button("Exit");
     Button exitBtnCourse = new Button("Exit");
     Button findStudentBtn = new Button("Find Grade");
     Button findCourseBtn = new Button("Find Grade");
+    Button editGradeBtn = new Button("Edit Grade");
     Label studentLbl = new Label("Student");
     Label courseLbl = new Label("Course");
 
     ComboBox<String> studentComB = new ComboBox<>();
     ComboBox<String> courseComB = new ComboBox<>();
+    ComboBox<Integer> editGradeComB = new ComboBox<>();
     TextArea studentGradeArea = new TextArea();
     TextArea courseGradeArea = new TextArea();
+
+    public void editBtnVisible(){
+        editGradeComB.setVisible(true);
+        editGradeBtn.setVisible(true);
+    }
+
+    public void editBtnNotVisiable(){
+        editGradeComB.setVisible(false);
+        editGradeBtn.setVisible(false);
+    }
 
     public GradeView(GradeController controller){
         this.controller = controller;
@@ -39,6 +53,13 @@ public class GradeView {
         TabView = new TabPane();
         Tab studentTab = new Tab("Students");
         Tab courseTab = new Tab("Courses");
+        possibleGrades.add(-3);
+        possibleGrades.add(0);
+        possibleGrades.add(2);
+        possibleGrades.add(4);
+        possibleGrades.add(7);
+        possibleGrades.add(10);
+        possibleGrades.add(12);
 
         //Set the closing policy to false so the user can't close the tabs
         studentTab.setClosable(false);
@@ -70,6 +91,13 @@ public class GradeView {
         studentGradeArea.setEditable(false); //Ready-only TextArea
         StudentView.add(exitBtnStudent, 20, 15);
 
+        ObservableList<Integer> pG = FXCollections.observableList(possibleGrades);
+        editGradeComB.setItems(pG);
+        StudentView.add(editGradeComB, 14, 15);
+        editGradeComB.getSelectionModel().selectFirst();
+        StudentView.add(editGradeBtn, 14, 16);
+        editGradeComB.setVisible(false);
+        editGradeBtn.setVisible(false);
 
         CourseView.add(courseLbl, 1, 1);
         CourseView.add(courseComB, 14, 1);
